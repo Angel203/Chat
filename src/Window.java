@@ -14,8 +14,8 @@ public class Window extends JFrame implements ActionListener {
     Socket s;
 
 
+    JOptionPane jOptionPane;
 
-    Scanner sc = new Scanner(System.in);
     String msg;
 
     public static JTextArea chat;
@@ -42,7 +42,7 @@ public class Window extends JFrame implements ActionListener {
 
         chat = new JTextArea();
         jschat  = new JScrollPane(chat);
-        jschat.setPreferredSize(new Dimension(200,40));
+        jschat.setPreferredSize(new Dimension(200,400));
         senden = new JButton("senden");
 
         senden.setEnabled(true);
@@ -51,7 +51,8 @@ public class Window extends JFrame implements ActionListener {
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.getViewport().setView(jList_namen);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jList_namen.setPreferredSize(new Dimension(80, HEIGHT));
+        scrollPane.setPreferredSize(new Dimension(80, 400));
+        jList_namen.setPreferredSize(new Dimension(80, 400));
 
 
         jList_namen.setCellRenderer(new Chat_Mates());
@@ -82,7 +83,7 @@ public class Window extends JFrame implements ActionListener {
 
     private void nameDialog() throws IOException {
         name = JOptionPane.showInputDialog( "Name: ");
-        System.out.println(name);
+
         if(name.isEmpty())
         {
             nameDialog();
@@ -100,7 +101,7 @@ public class Window extends JFrame implements ActionListener {
             s = new Socket(ip, 44444);
         } catch (IOException e) {
             ipDialog();
-            System.out.println("Konnte nicht verbinden");
+            jOptionPane.showMessageDialog(this, "Server antwortet nicht.", "Verbindungsproblem", JOptionPane.WARNING_MESSAGE);
         }
     }
 

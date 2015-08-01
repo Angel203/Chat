@@ -10,7 +10,7 @@ public class EchoServer extends Component {
     private ServerSocket server;
     private ArrayList<LeseThread> alleLeseThreads = new ArrayList<LeseThread>();
 
-    public static final Semaphore sem = new Semaphore(0, true);
+    public static final Semaphore sem = new Semaphore(0, true);         // (Freigaben = 0, FIFO Strategie)
 
 
     public EchoServer(int port) throws IOException {
@@ -39,6 +39,9 @@ public class EchoServer extends Component {
                 e.printStackTrace();
                 try{
                     lt.getClient().close();
+                    Window.listenModel.removeElement(lt.get_Name());
+                    System.out.println(lt.get_Name()+ " entfernt");
+                    liste_senden();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

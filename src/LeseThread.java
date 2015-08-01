@@ -86,13 +86,14 @@ public class LeseThread extends Thread {
         catch(NoSuchElementException e)
         {
 
-           server.anAlle("2::SERVER:" + name + " has disconnected.\n");
-           Window.listenModel.removeElement(name);
-            System.out.println(name+ " entfernt");
-          server.liste_senden();
+
 
             try {
                 client.close();
+                server.anAlle("2::SERVER:" + name + " has disconnected.\n");
+                Window.listenModel.removeElement(name);
+                System.out.println(name+ " entfernt");
+                server.liste_senden();
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -101,10 +102,12 @@ public class LeseThread extends Thread {
 
         }
         catch (Exception e){
-            name = null;
-            e.printStackTrace();
             try {
                 client.close();
+                server.anAlle("2::SERVER:" + name + " has disconnected.\n");
+                Window.listenModel.removeElement(name);
+                System.out.println(name+ " entfernt");
+                server.liste_senden();
             } catch (IOException e1) {
             }
         }

@@ -1,6 +1,4 @@
-import javax.swing.*;
 import java.io.IOException;
-import java.net.Proxy;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -22,11 +20,7 @@ public class LeseThread_Client extends Thread {
     @Override
     public void run() {
         try{
-
-
             while (true){
-
-
                 Message m;
 
                 String tmp;
@@ -55,7 +49,7 @@ public class LeseThread_Client extends Thread {
                             break;
 
                         default:
-                            throw new MessageException("alle blöd");
+                            throw new MessageException("kein Bekannter Nachrichtentyp");
                     }
                 } catch(Exception e)
                 {
