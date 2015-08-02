@@ -40,6 +40,25 @@ public class Window extends JFrame implements ActionListener {
         setSize(400, 400);
         setLayout(new BorderLayout(2, 4));
 
+        Frame_content();                    // alle add's
+
+        setMinimumSize(getSize());
+        setVisible(true);
+
+        ipDialog();
+
+        // JDialog mit anschlieﬂender Anmeldung
+        nameDialog();
+
+
+
+        LeseThread_Client lt = new LeseThread_Client(s);
+        lt.run();
+
+
+    }
+
+    private void Frame_content() {
         chat = new JTextArea();
         jschat  = new JScrollPane(chat);
         jschat.setPreferredSize(new Dimension(200,400));
@@ -63,45 +82,36 @@ public class Window extends JFrame implements ActionListener {
         c.add(jschat, BorderLayout.CENTER);
         c.add(panel_unten, BorderLayout.SOUTH);
         c.add(scrollPane, BorderLayout.EAST);
-
-
-        setMinimumSize(getSize());
-        setVisible(true);
-
-        ipDialog();
-
-        // JDialog mit anschlieﬂender Anmeldung
-        nameDialog();
-
-
-
-        LeseThread_Client lt = new LeseThread_Client(s);
-        lt.run();
-
-
     }
 
     private void nameDialog() throws IOException {
+
         name = JOptionPane.showInputDialog( "Name: ");
 
-        if(name.isEmpty())
-        {
-            nameDialog();
-        }
-        else {
-            msg = "0:SERVER:"+name+": Hallo\n";
-            s.getOutputStream().write(msg.getBytes());
-        }
-        setTitle("Chat [" + name + "]");
+            if(name == null) nameDialog();
+            else
+            if (name.isEmpty()) {
+                nameDialog();
+            } else
+            if (name.contains(".")) {
+                nameDialog();
+            } else {
+                msg = "0:SERVER:" + name + ": Hallo\n";
+                s.getOutputStream().write(msg.getBytes());
+            }
+            setTitle("Chat [" + name + "]");
+
     }
 
     private void ipDialog() {
         String ip = JOptionPane.showInputDialog("IP des Hosts eingeben: ", get_ip());
+        if(ip == null) System.exit(0);
+
         try {
             s = new Socket(ip, 44444);
         } catch (IOException e) {
-            ipDialog();
             jOptionPane.showMessageDialog(this, "Server antwortet nicht.", "Verbindungsproblem", JOptionPane.WARNING_MESSAGE);
+            ipDialog();
         }
     }
 
