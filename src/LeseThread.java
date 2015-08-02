@@ -8,6 +8,7 @@ public class LeseThread extends Thread {
     private Scanner scanner;
     private EchoServer server;
     private String name;
+    private String txt_ende = "\n";
 
     public LeseThread(Socket client, EchoServer server) throws IOException {
         this.client = client;
@@ -64,7 +65,7 @@ public class LeseThread extends Thread {
 
                 switch (m.getTyp()){
                     case Message.TYP_TO_ALL:
-                         server.anAlle("2::" + m.getFrom() + ":" + m.getContent() + "\n");
+                         server.anAlle("2::" + m.getFrom() + ":" + m.getContent() + txt_ende);
                         server.liste_senden();
                          break;
                     case Message.TYP_TO_ONE:
@@ -90,7 +91,7 @@ public class LeseThread extends Thread {
 
             try {
                 client.close();
-                server.anAlle("2::SERVER:" + name + " has disconnected.\n");
+                server.anAlle("2::SERVER:" + name + " has disconnected." + txt_ende);
                 Window.listenModel.removeElement(name);
                 System.out.println(name+ " entfernt");
                 server.liste_senden();
@@ -104,7 +105,7 @@ public class LeseThread extends Thread {
         catch (Exception e){
             try {
                 client.close();
-                server.anAlle("2::SERVER:" + name + " has disconnected.\n");
+                server.anAlle("2::SERVER:" + name + " has disconnected." + txt_ende);
                 Window.listenModel.removeElement(name);
                 System.out.println(name+ " entfernt");
                 server.liste_senden();

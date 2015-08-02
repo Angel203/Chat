@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.*;
 import java.util.Scanner;
@@ -9,27 +12,28 @@ import java.util.Scanner;
 /**
  * Created by Stefan_ on 26.07.2015.
  */
-public class Window extends JFrame implements ActionListener {
-    String name = "";
-    Socket s;
+public class Window extends JFrame implements ActionListener, KeyListener {
+    private String txt_ende = "\n";
+    private String name = "";
+    private Socket s;
 
 
-    JOptionPane jOptionPane;
+    private JOptionPane jOptionPane;
 
-    String msg;
+    private String msg;
 
     public static JTextArea chat;
     public  JPanel rechts = new JPanel();
     public static DefaultListModel listenModel = new DefaultListModel();
     public static JList<String> jList_namen = new JList<String>(listenModel);
 
-    JScrollPane jschat;
-    JTextField eingabe = new JTextField();
-    JButton senden;
+    private JScrollPane jschat;
+    private JTextField eingabe;
+    private JButton senden;
 
-    FlowLayout fl = new FlowLayout(2);
-    Container c = getContentPane();
-    JPanel panel_unten = new JPanel(fl);
+    private FlowLayout fl = new FlowLayout(2);
+    private Container c = getContentPane();
+    private JPanel panel_unten = new JPanel(fl);
 
 
 
@@ -58,26 +62,39 @@ public class Window extends JFrame implements ActionListener {
 
     }
 
+
+
+
     private void Frame_content() {
         chat = new JTextArea();
+        eingabe = new JTextField();
         jschat  = new JScrollPane(chat);
-        jschat.setPreferredSize(new Dimension(200,400));
+        JScrollPane scrollPane = new JScrollPane();
         senden = new JButton("senden");
 
-        senden.setEnabled(true);
+        // Listener hinzufügen
+        eingabe.addKeyListener(this);
         senden.addActionListener(this);
 
-        JScrollPane scrollPane = new JScrollPane();
+        // Anzeige_Teilnehmer
+        jList_namen.setCellRenderer(new Chat_Mates());
         scrollPane.getViewport().setView(jList_namen);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        // Größen Anpassung
         scrollPane.setPreferredSize(new Dimension(80, 400));
         jList_namen.setPreferredSize(new Dimension(80, 400));
-
-
-        jList_namen.setCellRenderer(new Chat_Mates());
-        chat.setEditable(false);
-        panel_unten.add(eingabe);
+        jschat.setPreferredSize(new Dimension(200,400));
         eingabe.setPreferredSize(new Dimension(240, 24));
+
+        // Attribute setzen
+        chat.setEditable(false);
+        senden.setEnabled(true);
+        DefaultCaret caret = (DefaultCaret)chat.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
+        // Das ganze hinzufügen
+        panel_unten.add(eingabe);
         panel_unten.add(senden);
         c.add(jschat, BorderLayout.CENTER);
         c.add(panel_unten, BorderLayout.SOUTH);
@@ -96,7 +113,7 @@ public class Window extends JFrame implements ActionListener {
             if (name.contains(".")) {
                 nameDialog();
             } else {
-                msg = "0:SERVER:" + name + ": Hallo\n";
+                msg = "0:SERVER:" + name + ": Hallo" + txt_ende;
                 s.getOutputStream().write(msg.getBytes());
             }
             setTitle("Chat [" + name + "]");
@@ -135,17 +152,43 @@ public class Window extends JFrame implements ActionListener {
 
         if(e.getSource() == senden)
         {
+            sende_text();
+        }
 
-            msg = "2::" + name + ":" + eingabe.getText() + "\n";
-            System.out.println(msg);
+    }
+
+    private void sende_text() {
+        if(!eingabe.getText().equals(""))
+        {
+            msg = "2::" + name + ":" + eingabe.getText() + "" + txt_ende;
+            System.out.print(msg);
             try {
                 s.getOutputStream().write(msg.getBytes());
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
             eingabe.setText("");
-
         }
+    }
+
+
+
+    @Override
+    public void keyPressed(KeyEvent e)
+    {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            sende_text();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
 
     }
 }

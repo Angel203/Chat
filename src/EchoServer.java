@@ -9,7 +9,7 @@ import java.util.concurrent.Semaphore;
 public class EchoServer extends Component {
     private ServerSocket server;
     private ArrayList<LeseThread> alleLeseThreads = new ArrayList<LeseThread>();
-
+    private String txt_ende = "\n";
     public static final Semaphore sem = new Semaphore(0, true);         // (Freigaben = 0, FIFO Strategie)
 
 
@@ -29,7 +29,7 @@ public class EchoServer extends Component {
 
                 sem.acquire(); // wird in LeseThread freigegeben, sobald der Name gesetzt wurde (für get_Name() wichtig)
                 s = lt.getClient();
-                String st = "3:" + lt.get_Name() + ":SERVER:" + lt.get_Name() + " connected\n";
+                String st = "3:" + lt.get_Name() + ":SERVER:" + lt.get_Name() + " connected" + txt_ende;
                 s.getOutputStream().write(st.getBytes());
 
                 liste_senden();
@@ -57,7 +57,7 @@ public class EchoServer extends Component {
             else        t = t + "." +l.get_Name();
 
         }
-        anAlle("1::SERVER:"+ t +"\n");
+        anAlle("1::SERVER:"+ t +"" + txt_ende);
     }
 
     // Elle sind alle
