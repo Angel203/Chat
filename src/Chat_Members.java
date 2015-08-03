@@ -8,13 +8,13 @@ import java.net.Socket;
 import javax.swing.*;
 
 
-public class Chat_Mates extends JPanel implements ListCellRenderer<String> {
+public class Chat_Members extends JPanel implements ListCellRenderer<String> {
 
 
     private JLabel name;
 
 
-    public Chat_Mates() {
+    public Chat_Members() {
         name = new JLabel();
         add(name);
 

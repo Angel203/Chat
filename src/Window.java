@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.*;
-import java.util.Scanner;
 
 /**
  * Created by Stefan_ on 26.07.2015.
@@ -77,7 +76,7 @@ public class Window extends JFrame implements ActionListener, KeyListener {
         senden.addActionListener(this);
 
         // Anzeige_Teilnehmer
-        jList_namen.setCellRenderer(new Chat_Mates());
+        jList_namen.setCellRenderer(new Chat_Members());
         scrollPane.getViewport().setView(jList_namen);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
