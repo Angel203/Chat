@@ -25,7 +25,7 @@ public class LeseThread extends Thread {
         Message m = new Message(line0);
 
         if (m.getTyp()!=Message.TYP_LOGIN)
-            throw new MessageException("Blödarsch!");
+            throw new MessageException("Zuerst einloggen!");
 
 
         if (server.addUser(m.getFrom()))
